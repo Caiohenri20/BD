@@ -1,1 +1,157 @@
-# BD
+CREATE DATABASE EXERCICIO
+
+
+create table Medida
+(
+idMedida int not null identity(1,1)
+,Nome varchar(50) not null
+,Descricao varchar(100)
+,constraint pkMedida primary key(idMedida)
+);
+
+create table TipoIngrediente
+(
+idTipoIngrediente int not null identity
+,Descricao varchar(100)
+,constraint pkTipoIngrediente primary key(idTipoIngrediente)
+);
+
+create table Ingrediente
+(
+idIngrediente int not null identity
+,idTipoIngrediente int not null
+,Nome varchar(50) not null
+,constraint pkIngrediente primary key(idIngrediente)
+,constraint fkIngrediente foreign key(idTipoIngrediente)
+references TipoIngrediente(idTipoIngrediente)
+);
+
+create table Bebida
+(
+idBebida int not null identity
+,Nome varchar(50) not null
+,ModoPreparo varchar not null
+,TempoPreparo tinyint not null
+,Quantidade tinyint not null
+,idMedida int not null
+,Temperatura tinyint not null
+,constraint pkBebida primary key(idBebida)
+,constraint fkBebida foreign key(idMedida)
+references Medida(idMedida)
+);
+
+create table BebidaIngrediente
+(
+idBebida int not null
+,idIngrediente int not null
+,idMedida int not null
+,Quantidade tinyint not null
+,constraint pkBebidaIngrediente primary key(idBebida, idIngrediente, idMedida)
+,constraint fkBebidaIngrediente foreign key(idBebida)
+references Bebida(idBebida),
+constraint fkBebidaIngredienteI foreign Key(idIngrediente)
+references Ingrediente(idIngrediente),
+constraint fkBebidaIngredienteII foreign key(idMedida)
+references Medida(idMedida)
+);
+
+create table Venda
+(
+idBebida int not null
+,data datetime
+,Quantidade tinyint not null
+,constraint pkVenda primary key(idBebida)
+,constraint fkVenda foreign key(idBebida)
+references Bebida(idBebida)
+);
+
+
+SELECT * FROM MEDIDA
+
+INSERT INTO Medida (Nome,Descricao) VALUES ('Lata','Está é a medida da lata de 600 Ml');
+
+INSERT INTO Medida (Nome,Descricao) VALUES ('Garrafa','Esta é a medida da garrafa de 600 Ml');
+
+INSERT INTO Medida (Nome,Descricao) VALUES ('Garrafa','Esta é a medida da garrafa de 2 L');
+
+UPDATE Medida
+SET Descricao = 'Esta é a medida da garrafa de 2L'
+WHERE IDMEDIDA = '3'
+
+delete from Medida
+where idMedida = '4'
+
+SELECT * FROM Ingrediente
+
+INSERT INTO Ingrediente (idTipoIngrediente,NOME) VALUES ('1','AÇUCAR');
+INSERT INTO Ingrediente (idTipoIngrediente,NOME) VALUES ('3','MEL');
+INSERT INTO Ingrediente (idTipoIngrediente,NOME) VALUES ('4','CACAU');
+
+DELETE FROM Ingrediente
+WHERE idTipoIngrediente = '3'
+
+SELECT * FROM TipoIngrediente
+
+INSERT INTO TipoIngrediente (Descricao) VALUES ('MENTA,CANA');
+INSERT INTO TipoIngrediente (Descricao) VALUES ('SODA,LIMÃO');
+INSERT INTO TipoIngrediente (Descricao) VALUES ('UVA,ÁGUA');
+
+DELETE FROM TipoIngrediente
+WHERE idTipoIngrediente = '2'
+
+UPDATE TipoIngrediente
+SET idTipoIngrediente = '2'
+WHERE idTipoIngrediente = '3'
+
+
+
+4 Bebidas (cada bebida possuindo no mínimo 2 ingredientes)
+
+SELECT * FROM Bebida 
+
+INSERT INTO Bebida (Nome,ModoPreparo,TempoPreparo,Quantidade,idMedida,Temperatura)
+VALUES
+('fanta-uva','a','3','6','2','30'),
+('fanta-laranja','a','3','6','3','30'),
+('itubaina','a','3','6','1','30');
+
+ALTER TABLE Bebida ALTER COLUMN ModoPreparo varchar(3) not NULL
+
+UPDATE Bebida
+SET ModoPreparo = 'b,c'
+WHERE idBebida = '5'
+
+select * from Medida
+
+
+
+select * from BebidaIngrediente
+
+INSERT INTO BebidaIngrediente (idBebida,idIngrediente,idMedida,Quantidade)
+VALUES 
+('5','4','1','5'),
+('5','8','1','6'),
+('7','4','1','7'),
+('7','8','1','8'),
+('8','4','1','9'),
+('8','8','1','10'),
+('9','7','1','11'),
+('9','8','1','12');
+
+select * from Bebida,Ingrediente,Medida
+
+
+SELECT * FROM Venda
+SELECT * FROM Bebida
+
+INSERT INTO Venda (idBebida,data,Quantidade) VALUES 
+('5','1/02/2017','3'),
+('7','1/03/2017','6'),
+('8','1/04/2017','12'),
+('9','1/05/2017','15');
+
+UPDATE VENDA 
+SET data = '1/05/2015'
+WHERE idBebida = '9'
+
+/* PERGUNTAR PARA O PROFESSOR SOBRE A TABELA DE VENDAS, PRODUTOS COM CHAVE EXTRAGEIRA E CHAVE PRIMARIA*/
